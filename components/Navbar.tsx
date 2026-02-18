@@ -10,9 +10,9 @@ export default function Navbar() {
   const pathname = usePathname()
   const [user, setUser] = useState<User | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
-  const supabase = createClient()
 
   useEffect(() => {
+    const supabase = createClient()
     supabase.auth.getUser().then(({ data: { user } }) => setUser(user))
 
     const {
@@ -22,9 +22,10 @@ export default function Navbar() {
     })
 
     return () => subscription.unsubscribe()
-  }, [supabase.auth])
+  }, [])
 
   const handleSignOut = async () => {
+    const supabase = createClient()
     await supabase.auth.signOut()
     setUser(null)
     window.location.href = '/'

@@ -15,11 +15,11 @@ function ListingsContent() {
   const [category, setCategory] = useState<ListingCategory | 'all'>(initialCategory)
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
-  const supabase = createClient()
 
   useEffect(() => {
     async function fetchListings() {
       setLoading(true)
+      const supabase = createClient()
       let query = supabase
         .from('listings')
         .select('*, seller:profiles(*)')
@@ -40,7 +40,7 @@ function ListingsContent() {
     }
 
     fetchListings()
-  }, [category, search, supabase])
+  }, [category, search])
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">

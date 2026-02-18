@@ -10,7 +10,6 @@ import { toast } from 'sonner'
 
 export default function DashboardPage() {
   const router = useRouter()
-  const supabase = createClient()
   const [listings, setListings] = useState<Listing[]>([])
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
@@ -18,6 +17,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function load() {
+      const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
         router.push('/auth/login')
@@ -43,9 +43,10 @@ export default function DashboardPage() {
     }
 
     load()
-  }, [supabase, router])
+  }, [router])
 
   const handleStatusChange = async (id: string, status: string) => {
+    const supabase = createClient()
     const { error } = await supabase
       .from('listings')
       .update({ status })
@@ -65,6 +66,7 @@ export default function DashboardPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this listing?')) return
 
+    const supabase = createClient()
     const { error } = await supabase.from('listings').delete().eq('id', id)
 
     if (error) {
