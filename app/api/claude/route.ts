@@ -4,7 +4,7 @@ import { sendMessage, sendConversation } from '@/lib/claudeUtils';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { message, messages, systemPrompt, model } = body;
+    const { message, messages, systemPrompt, model, maxTokens } = body;
 
     // Validate request
     if (!message && !messages) {
@@ -26,9 +26,9 @@ export async function POST(request: NextRequest) {
 
     // Handle single message or conversation
     if (messages && Array.isArray(messages)) {
-      response = await sendConversation(messages, systemPrompt, model);
+      response = await sendConversation(messages, systemPrompt, model, maxTokens);
     } else {
-      response = await sendMessage(message, systemPrompt, model);
+      response = await sendMessage(message, systemPrompt, model, maxTokens);
     }
 
     return NextResponse.json({ response }, { status: 200 });
