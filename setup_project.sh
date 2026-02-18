@@ -33,6 +33,7 @@ error() { echo -e "${RED}[ERROR]${NC} $*"; exit 1; }
 command -v node >/dev/null 2>&1 || error "Node.js is not installed. Please install it first."
 command -v npm  >/dev/null 2>&1 || error "npm is not installed. Please install it first."
 command -v git  >/dev/null 2>&1 || error "git is not installed. Please install it first."
+command -v rsync >/dev/null 2>&1 || error "rsync is not installed. Please install it first."
 
 # ── 1. Create project directory ─────────────────────────────────────────────
 if [ -d "$PROJ_DIR" ]; then
@@ -108,8 +109,8 @@ if [[ "${DEPLOY_ANSWER,,}" == "y" ]]; then
   vercel link
 
   # Set the required environment variables in Vercel
-  echo "$SUPABASE_URL"      | vercel env add NEXT_PUBLIC_SUPABASE_URL production
-  echo "$SUPABASE_ANON_KEY" | vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production
+  printf '%s' "$SUPABASE_URL"      | vercel env add NEXT_PUBLIC_SUPABASE_URL production
+  printf '%s' "$SUPABASE_ANON_KEY" | vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production
 
   vercel --prod
   info "Deployed to Vercel."
@@ -119,8 +120,8 @@ else
   info "To deploy later, run:"
   echo "  cd $PROJ_DIR"
   echo "  npx vercel link"
-  echo "  echo \$NEXT_PUBLIC_SUPABASE_URL      | npx vercel env add NEXT_PUBLIC_SUPABASE_URL production"
-  echo "  echo \$NEXT_PUBLIC_SUPABASE_ANON_KEY  | npx vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production"
+  echo "  npx vercel env add NEXT_PUBLIC_SUPABASE_URL production      # paste your Supabase URL when prompted"
+  echo "  npx vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production  # paste your anon key when prompted"
   echo "  npx vercel --prod"
 fi
 
