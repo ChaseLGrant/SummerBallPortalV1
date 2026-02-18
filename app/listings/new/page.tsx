@@ -32,6 +32,13 @@ export default function NewListingPage() {
     let image_url: string | null = null
 
     if (imageFile && imageFile.size > 0) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+      if (!allowedTypes.includes(imageFile.type)) {
+        toast.error('Only JPEG, PNG, GIF and WebP images are allowed.')
+        setLoading(false)
+        return
+      }
+
       const fileExt = imageFile.name.split('.').pop()
       const filePath = `${user.id}/${Date.now()}.${fileExt}`
 
