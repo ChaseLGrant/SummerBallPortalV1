@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
@@ -16,6 +16,14 @@ const roles: { value: UserRole; label: string; icon: string; desc: string }[] = 
 ]
 
 export default function SignupPage() {
+  return (
+    <Suspense fallback={<div className="min-h-[80vh] flex items-center justify-center"><p className="text-gray-500">Loading...</p></div>}>
+      <SignupForm />
+    </Suspense>
+  )
+}
+
+function SignupForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const supabase = createClient()
